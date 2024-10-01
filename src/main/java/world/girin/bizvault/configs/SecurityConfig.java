@@ -79,7 +79,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/healthcheck").permitAll()
+                        .requestMatchers("/", "/hello", "/healthcheck").permitAll()
                         .anyRequest().authenticated());
 
         http
