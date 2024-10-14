@@ -38,32 +38,27 @@ public class CustomOAuth2UserEntity implements OAuth2User {
         collection.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-
                 String role = userDto.getRole();
                 return role;
             }
         });
-
         return collection;
     }
 
     @Override
     public String getName() {
-
         String nickname = userDto.getNickname();
 
         return nickname != null ? nickname : "";
     }
 
     public String getProfileImg() {
-
         String profileImg = userDto.getProfileImg();
 
         return profileImg != null ? profileImg : "";
     }
 
     public String getUsername() {
-
         String username = userDto.getUsername();
 
         return username != null ? username : "";

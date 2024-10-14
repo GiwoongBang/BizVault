@@ -18,7 +18,6 @@ public class GoogleResponse implements OAuth2Response {
 
     @Override
     public String getProviderId() {
-
         Object sub = attribute.get("sub");
 
         return sub != null ? sub.toString() : "";
@@ -26,7 +25,6 @@ public class GoogleResponse implements OAuth2Response {
 
     @Override
     public String getNickname() {
-
         Object name = attribute.get("name");
 
         return name != null ? name.toString() : "";
@@ -34,9 +32,9 @@ public class GoogleResponse implements OAuth2Response {
 
     @Override
     public String getProfileImage() {
-
         Object picture = attribute.get("picture");
 
         return picture != null ? picture.toString() : "";
     }
+
 }

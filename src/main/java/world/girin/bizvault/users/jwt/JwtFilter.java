@@ -31,7 +31,6 @@ public class JwtFilter extends OncePerRequestFilter {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("Authorization")) {
-
                     authorization = cookie.getValue();
                     break;
                 }
@@ -39,7 +38,6 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         if (authorization == null || !authorization.startsWith("BEARER_")) {
-
             filterChain.doFilter(request, response);
 
             return;
@@ -47,10 +45,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String accessToken = authorization.substring(7);
         try {
-
             jwtUtil.isExpired(accessToken);
         } catch (ExpiredJwtException e) {
-
             filterChain.doFilter(request, response);
 
             return;
@@ -58,7 +54,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String category = jwtUtil.getCategory(accessToken);
         if (category == null || !category.equals("access")) {
-
             filterChain.doFilter(request, response);
 
             return;
@@ -77,9 +72,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 .build();
 
         CustomOAuth2UserEntity customOAuth2User = new CustomOAuth2UserEntity(userDto);
-
         Authentication authToken = new UsernamePasswordAuthenticationToken(customOAuth2User, null, customOAuth2User.getAuthorities());
-
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);

@@ -31,4 +31,5 @@ public class RefreshTokenEntity {
         this.refreshToken = refreshToken;
         this.expriration = expriration;
     }
+
 }

@@ -19,7 +19,6 @@ public class NaverResponse implements OAuth2Response {
 
     @Override
     public String getProviderId() {
-
         Object id = attribute.get("id");
 
         return id != null ? id.toString() : "";
@@ -27,7 +26,6 @@ public class NaverResponse implements OAuth2Response {
 
     @Override
     public String getNickname() {
-
         Object nickname = attribute.get("nickname");
 
         return nickname != null ? nickname.toString() : "";
@@ -35,7 +33,6 @@ public class NaverResponse implements OAuth2Response {
 
     @Override
     public String getProfileImage() {
-
         Object profileImage = attribute.get("profile_image");
 
         return profileImage != null ? profileImage.toString() : "";

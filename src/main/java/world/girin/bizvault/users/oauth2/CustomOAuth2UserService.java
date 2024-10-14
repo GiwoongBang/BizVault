@@ -29,13 +29,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2Response oAuth2Response;
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         if (registrationId.equals("naver")) {
-
             oAuth2Response = new NaverResponse(oAuth2User.getAttributes());
-
         } else if (registrationId.equals("google")) {
-
             oAuth2Response = new GoogleResponse(oAuth2User.getAttributes());
-
         } else {
 
             return null;
@@ -45,20 +41,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         UserEntity foundUser = userRepository.findByUsername(username);
 
         if (foundUser == null) {
-
             UserEntity newUser = new UserEntity(username, oAuth2Response);
-
             userRepository.save(newUser);
-
             UserDto userDto = new UserDto(newUser);
 
             return new CustomOAuth2UserEntity(userDto);
         } else {
-
             foundUser.update(oAuth2Response);
-
             userRepository.save(foundUser);
-
             UserDto userDto = new UserDto(foundUser);
 
             return new CustomOAuth2UserEntity(userDto);

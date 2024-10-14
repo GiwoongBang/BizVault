@@ -101,9 +101,7 @@ public class JwtUtil {
             cookie.setMaxAge(JWT_ACCESS_EXPIRATION_TIME / 1000);
         } else {
             cookie.setMaxAge(JWT_REFRESH_EXPIRATION_TIME / 1000);
-
         }
-
         cookie.setSecure(true);
         cookie.setPath("/");
         cookie.setHttpOnly(true);

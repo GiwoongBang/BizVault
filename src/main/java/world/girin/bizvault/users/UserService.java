@@ -25,13 +25,11 @@ public class UserService {
     }
 
     public ResponseEntity<String> reissueToken(HttpServletRequest request, HttpServletResponse response) {
-
         String authorization = null;
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("Refresh-Token")) {
-
                     authorization = cookie.getValue();
                     break;
                 }
@@ -45,7 +43,6 @@ public class UserService {
 
         String refreshToken = authorization.substring(7);
         try {
-
             jwtUtil.isExpired(refreshToken);
         } catch (ExpiredJwtException e) {
 

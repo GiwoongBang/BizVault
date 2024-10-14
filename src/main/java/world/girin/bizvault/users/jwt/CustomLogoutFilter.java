@@ -33,7 +33,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         String requestUri = request.getRequestURI();
         if (!requestUri.matches("^\\/logout$")) {
-
             filterChain.doFilter(request, response);
 
             return;
@@ -41,7 +40,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         String requestMethod = request.getMethod();
         if (!requestMethod.equals("POST")) {
-
             filterChain.doFilter(request, response);
 
             return;
@@ -52,7 +50,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("Refresh-Token")) {
-
                     authorization = cookie.getValue();
                     break;
                 }
@@ -60,7 +57,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
         }
 
         if (authorization == null || !authorization.startsWith("BEARER_")) {
-
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
             return;
@@ -68,10 +64,8 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         String refreshToken = authorization.substring(7);
         try {
-
             jwtUtil.isExpired(refreshToken);
         } catch (ExpiredJwtException e) {
-
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
             return;
@@ -79,7 +73,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         String category = jwtUtil.getCategory(refreshToken);
         if (category == null || !category.equals("refresh")) {
-
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
             return;
@@ -87,7 +80,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         Boolean isExist = refreshTokenRepository.existsByRefreshToken(refreshToken);
         if (!isExist) {
-
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
             return;
