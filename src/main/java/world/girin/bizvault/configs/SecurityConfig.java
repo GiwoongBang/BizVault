@@ -12,6 +12,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import world.girin.bizvault.users.jwt.CustomLogoutFilter;
+import world.girin.bizvault.users.jwt.JwtFilter;
+import world.girin.bizvault.users.jwt.JwtUtil;
+import world.girin.bizvault.users.jwt.RefreshTokenRepository;
+import world.girin.bizvault.users.oauth2.CustomOAuth2UserService;
+import world.girin.bizvault.users.oauth2.CustomSuccessHandler;
 
 import java.util.Collections;
 
@@ -19,23 +25,22 @@ import java.util.Collections;
 @EnableWebSecurity
 public class SecurityConfig {
 
-//    private final CustomOAuth2UserService customOAuth2UserService;
-//
-//    private final CustomSuccessHandler customSuccessHandler;
-//
-//    private final JwtUtil jwtUtil;
-//
-//    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService,
-//                          CustomSuccessHandler customSuccessHandler,
-//                          JwtUtil jwtUtil) {
-//        this.customOAuth2UserService = customOAuth2UserService;
-//        this.customSuccessHandler = customSuccessHandler;
-//        this.jwtUtil = jwtUtil;
-//    }
+    private final CustomOAuth2UserService customOAuth2UserService;
+
+    private final CustomSuccessHandler customSuccessHandler;
+
+    private final JwtUtil jwtUtil;
+
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService,
+                          CustomSuccessHandler customSuccessHandler,
+                          JwtUtil jwtUtil) {
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.customSuccessHandler = customSuccessHandler;
+        this.jwtUtil = jwtUtil;
+    }
 
     @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http, RefreshTokenRepository refreshTokenRepository) throws Exception {
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, RefreshTokenRepository refreshTokenRepository) throws Exception {
 
         http
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
@@ -63,23 +68,25 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable);
 
-//        http
-//                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository), LogoutFilter.class);
-//
-//        http
-//                .addFilterAfter(new JwtFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
-//
-//        http
-//                .oauth2Login((oauth2) -> oauth2
-//                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
-//                                .userService(customOAuth2UserService)
-//                        )
-//                        .successHandler(customSuccessHandler)
-//                );
+        http
+                .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository), LogoutFilter.class);
+
+        http
+                .addFilterAfter(new JwtFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
+
+        http
+                .oauth2Login((oauth2) -> oauth2
+                        .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
+                                .userService(customOAuth2UserService)
+                        )
+                        .successHandler(customSuccessHandler)
+                );
 
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/hello", "/healthcheck").permitAll()
+                        .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/reissue").permitAll()
                         .anyRequest().authenticated());
 
         http
